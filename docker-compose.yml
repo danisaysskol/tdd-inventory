@@ -1,4 +1,4 @@
-# docker-compose.yml
+version: '3.9'
 
 services:
   api:
@@ -7,6 +7,17 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
+      - ./app/inventory.db:/app/inventory.db
+    environment:
+      - DATABASE_URL=/app/inventory.db
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["pytest", "tests/test_main.py", "-v"]
     volumes:
       - .:/app
       - ./app/inventory.db:/app/inventory.db
